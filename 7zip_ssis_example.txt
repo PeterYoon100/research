@@ -1,0 +1,24 @@
+ZIP
+
+Executable    C:\Program Files\7-Zip\7z.exe
+Arguments     a -tzip
+
+"a -tzip doc_" + (DT_STR,4,1252)DATEPART( "yyyy" , getdate() ) +
+RIGHT("0" + (DT_STR,4,1252)DATEPART( "mm" , getdate() ), 2) +
+RIGHT("0" + (DT_STR,4,1252)DATEPART( "dd" , getdate() ), 2) +".zip"
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+unzip
+
+I've developed an automated SSIS solution to download zip files from an FTP Server every month. Each month the code gets the latest version of a specific file
+i.e. filename_YYYYMM_full.zip, downloads it and unzips it and finally loads them into the target database
+
+I installed 7zip and its possible to call this dynamically to pass in the dynamic filename and destination path e.g. 
+"x "+ @[User::VarZipFilePath]+  (DT_STR,4,1252)YEAR( getdate() )  + Right( "0" + (DT_WSTR, 2 ) MONTH(Getdate()),2)+ "_FULL.ZIP" +  " -o"+ @[User::VarUnzipFolderPath] +" -aoa"
+
+
+The steps in SSIS are simple to follow. Let us say we have a zip file called xyz.zip that is located in our hard disk. To unzip this with SSIS we have to create a package. In the package let us add Execute Process Task.
+In the Execute Process Task set the Executable property to the C:\Program Files\7-zip\7-zip.exe or whatever location your 7z.exe is installed.
+In the Arguments you can write x [Zip File Location] -o[Destinatin Folder Location]. For example if your zip file is in D drive and you want to extract the contents of this zip file to temp folder you can write argument like D:\xyz.zip -oD:\temp.
+

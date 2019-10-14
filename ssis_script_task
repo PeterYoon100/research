@@ -1,0 +1,38 @@
+using System.Windows.Forms;
+
+string strVarName;
+string strVarValue;
+foreach (var in Dts.Variables) {
+    strVarName = var.Name;
+    strVarValue = var.Value.ToString;
+    MsgBox((strVarName + ("=" + strVarValue)));
+}
+-------------------------------------------------------------
+
+It seems like a much easier approach is to use File.AppendAllText(), or one of the other variations in System.IO.File.
+
+string filename = "MyFile.txt";
+System.IO.FileInfo file = new System.IO.FileInfo("C:\\" + filename);
+file.Delete();
+
+string text = "My text here";
+string path = @"C:\Data\TextFiles\logFile.txt";
+
+System.IO.File.AppendAllText(path, text);
+-------------------------------------------------------------------------------
+string temp1 = null;
+string temp2 = null;
+temp1 = (string)Dts.Variables["TestVariable"].Value;
+temp2 = "New Value";
+DialogResult button = MessageBox.Show("The current value of the SSIS global variable 'TestVariable' is '" + temp1 + ".'\r\n \r\n The value will be changed to '" + temp2 + ".'");
+Dts.Variables["TestVariable"].Value = temp2.ToString();
+button = MessageBox.Show("The value of SSIS global variable 'TestVariable' has been changed to '" + (string)Dts.Variables["TestVariable"].Value + ".'");
+
+---------------------------------------------------------
+
+The new value of 'TestVariable' is set by this statement.
+ Dts.Variables["TestVariable"].Value = temp2.ToString();
+ 
+ ------------------------------------------
+ MIke Davis SQL
+ https://mikedavissql.com/tag/ssis/
